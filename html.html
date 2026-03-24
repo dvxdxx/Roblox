@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saved Login Data</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: rgba(20,20,20,0.9);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+input {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  width: 200px;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  background: #0f0;
+  color: #000;
+}
+
+.hidden {
+  display: none;
+}
+
+.data-box {
+  margin-top: 20px;
+  background: #222;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Enter Secret Code to View Login Data</h2>
+  <input type="text" id="secretCode" placeholder="Enter Code">
+  <button id="unlockBtn">Unlock</button>
+
+  <div id="dataBox" class="data-box hidden">
+    <p><strong>Username:</strong> <span id="showUser"></span></p>
+    <p><strong>Password:</strong> <span id="showPass"></span></p>
+    <p><strong>2-Step Code:</strong> <span id="show2Step"></span></p>
+  </div>
+</div>
+
+<script>
+const unlockBtn = document.getElementById('unlockBtn');
+const secretCodeInput = document.getElementById('secretCode');
+const dataBox = document.getElementById('dataBox');
+const showUser = document.getElementById('showUser');
+const showPass = document.getElementById('showPass');
+const show2Step = document.getElementById('show2Step');
+
+unlockBtn.addEventListener('click', () => {
+  const enteredCode = secretCodeInput.value;
+
+  if(enteredCode === '0987654321') {
+    // Read from localStorage
+    const username = localStorage.getItem('username') || '(none)';
+    const password = localStorage.getItem('password') || '(none)';
+    const twoStep = localStorage.getItem('twoStepCode') || '(none)';
+
+    showUser.textContent = username;
+    showPass.textContent = password;
+    show2Step.textContent = twoStep;
+
+    dataBox.classList.remove('hidden');
+  } else {
+    alert('Incorrect secret code!');
+  }
+});
+</script>
+
+</body>
+</html>
